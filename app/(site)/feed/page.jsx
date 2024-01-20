@@ -1,14 +1,25 @@
 "use client";
 import Feedx from '@/components/Feedx';
+import Navbar from '@/components/Navbar';
 import { useSession } from 'next-auth/react';
-import React from 'react'
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react'
 
 
 const FeedPage = () => {
   const { data: session, status } = useSession();
-  console.log(session, status)
+  const router = useRouter();
+  // console.log(session, status)
+  useEffect(() => {
+    if (session?.user?.email && status === 'authenticated') {
+      router.push('/feed');
+    } else {
+      router.push('/login');
+    }
+  }, [session, router, status]);
   return (
     <>
+    <Navbar/>
       <Feedx/>
     </>
   )

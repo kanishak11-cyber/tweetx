@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { FaRegComment, FaWindowClose } from "react-icons/fa";
-import Navbar from "./Navbar";
+import TweetList from "./TweetList";
 import { RiCloseCircleLine } from "react-icons/ri";
 const Feedx = () => {
   const [isWriteBoxOpen, setIsWriteBoxOpen] = useState(false);
@@ -18,11 +18,11 @@ const Feedx = () => {
 
   return (
     <>
-      <div className="min-h-[80vh] flex items-center justify-center mx-auto">
+      <div className="min-h-[80vh] flex items-center justify-center mx-auto -pb-20">
         <div className="my-10 w-full max-w-screen-md ">
           <button
             onClick={handleWriteButtonClick}
-            className="text-white px-5 py-3 rounded-xl bg-[#ff748d] absolute top-[10vh]"
+            className="text-white px-5 py-3 rounded-xl bg-[#ff748d] "
           >
             Write
           </button>
@@ -36,7 +36,7 @@ const Feedx = () => {
           )}
 
           {/* Tweet card */}
-          <div className="flex flex-row items-center w-full border rounded-xl shadow-md mt-4">
+          {/* <div className="flex flex-row items-center w-full border rounded-xl shadow-md mt-4">
             <div className="flex space-x-4 p-4 flex-1">
               <div className="w-20 h-20 bg-white border border-black rounded-full overflow-hidden"></div>
               <div className="flex-1">
@@ -55,10 +55,12 @@ const Feedx = () => {
               </div>
             </div>
             <div className="w-10 h-10 overflow-hidden">
-              {/* Semi-circle */}
+              
               <div className="bg-[#ff748d] h-10 w-10 ml-5 rounded-full"></div>
             </div>
-          </div>
+          </div> */}
+
+          <TweetList />
         </div>
       </div>
     </>
@@ -76,7 +78,7 @@ const WriteDialog = ({ onClose, onTweet }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
       <div className="bg-white p-4 rounded-md shadow-md ">
         {/* Write box content goes here */}
         <div className="flex items-center justify-between py-3">

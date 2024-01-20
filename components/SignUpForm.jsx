@@ -5,6 +5,7 @@ import Link from "next/link";
 import Pwd from "../assets/pwd.png";
 import Image from "next/image";
 import axios from "axios";
+import { toast } from "react-toastify";
 export default function SignUpForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -30,11 +31,12 @@ export default function SignUpForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(formData);
+    // console.log(formData);
     // Check if all fields are filled
     if (!formData.email || !formData.password) {
       // Handle the case where not all fields are filled
-      console.log("Please fill in all fields");
+      // console.log("Please fill in all fields");
+      toast.error("Please fill in all fields");
       setLoading(false);
       return;
     }
@@ -43,15 +45,15 @@ export default function SignUpForm() {
 
     try{
       const response = await axios.post('/api/register', formData);
-      console.log(response);
+      // console.log(response);
       if(response.status === 200 || response.status === 201){
-        console.log("success");
-        alert("Registration Successful");
+        // console.log("success");
+        toast.success("Registration Successful");
         router.push("/login");
       }
       else{
-        console.log("something went wrong");
-        alert("Something went wrong");
+        // console.log("something went wrong");
+        toast.error("Something went wrong");
       }
     }
     catch(err){

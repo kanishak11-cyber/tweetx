@@ -17,7 +17,7 @@ model User {
   email     String   @unique
   name      String?
   password  String?
-  
+  tweets    Tweet[]
 }
 
 model Tweet {
@@ -25,5 +25,6 @@ model Tweet {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   text      String
-  
+  authorId  String? @db.ObjectId // Change this to String, as it should reference the _id of User
+  author    User?    @relation(fields: [authorId], references: [id])
 }

@@ -6,6 +6,7 @@ import Pwd from "../assets/pwd.png";
 import Image from "next/image";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { signIn, useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
@@ -35,11 +36,12 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(formData);
+    // console.log(formData);
     // Check if all fields are filled
     if (!formData.email || !formData.password) {
       // Handle the case where not all fields are filled
-      console.log("Please fill in all fields");
+      // console.log("Please fill in all fields");
+      toast.error("Please fill in all fields");
       setLoading(false);
       return;
     }
@@ -50,22 +52,20 @@ export default function LoginForm() {
         email: formData?.email,
         password: formData?.password,
       });
-      console.log(response);
+      
       if (response?.status === 200 || response?.status === 201) {
-        console.log("success");
-        alert("Login Successful");
+        // console.log("success");
+        toast.success("Login Successful");
         router.push("/feed");
       } else {
-        console.log("something went wrong");
-        alert("Something went wrong");
+        // console.log("something went wrong");
+        toast.error("Something went wrong");
       }
     } catch (err) {
       console.error(err.message);
     }
 
     setLoading(false);
-
-
   };
 
   return (
