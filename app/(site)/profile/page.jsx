@@ -9,8 +9,9 @@ const ProfilePage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const user = session?.user;
+  console.log(user);
   useEffect(() => {
-    if (!session?.user?.email && session?.status === "authenticated") {
+    if (!session && status === "unauthenticated") {
       router.push("/login");
     }
   }, [session, status, router]);

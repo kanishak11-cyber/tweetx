@@ -1,10 +1,15 @@
 "use client";
+"use client";
 import JobCard from "@/components/JobCard";
 
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
+  const {data:session} = useSession()
+  const router = useRouter()
   const LIMIT = 10;
   const apiUrl = "https://api.crackeddevs.com/api/get-jobs";
   const apiToken = "47cb3287-0112-4a7f-ac9f-36b9e4223039";
@@ -34,7 +39,13 @@ const Page = () => {
   };
 
   useEffect(() => {
-    fetchJobsData(currentPage);
+if(!session){
+  router.push('/login')
+}
+else{
+  fetchJobsData(currentPage);
+}
+   
   }, [currentPage]);
 
   return (

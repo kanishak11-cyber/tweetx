@@ -11,7 +11,7 @@ const ProfileTab = () => {
   const {data:session} = useSession()
   const user = session?.user;
   const posts = user?.tweets;
-  console.log(posts)
+  // console.log(posts)
   const followers = user?.follower;
   const following = user?.following;
 

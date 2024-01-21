@@ -4,7 +4,7 @@ import  Avatar  from "./Avatar";
 import axios from "axios";
 
 const TweetList = ({feedData}) => {
-console.log(feedData)
+// console.log(feedData)
  
 
   function timeToTimeAgo(timestamp) {
