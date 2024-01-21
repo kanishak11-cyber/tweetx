@@ -1,7 +1,6 @@
 "use client";
 import Feedx from '@/components/Feedx';
-import Navbar from '@/components/Navbar';
-import { useSession } from 'next-auth/react';
+import {  useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
 
@@ -19,10 +18,11 @@ const FeedPage = () => {
   }, [session, router, status]);
   return (
     <>
-    <Navbar/>
       <Feedx/>
     </>
   )
 }
 
 export default FeedPage;
+
+

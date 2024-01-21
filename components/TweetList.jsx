@@ -1,6 +1,12 @@
-import React from "react";
+"use client"
+import React, { useEffect, useState } from "react";
+import  Avatar  from "./Avatar";
+import axios from "axios";
 
-const TweetList = () => {
+const TweetList = ({feedData}) => {
+console.log(feedData)
+ 
+
   function timeToTimeAgo(timestamp) {
     const currentDate = new Date();
     const postDate = new Date(timestamp);
@@ -33,16 +39,16 @@ const TweetList = () => {
   return (
     <div>
       <div className="flex flex-col gap-6 mt-6">
-        {feedData.map((feed) => (
+        {feedData?.map((feed) => (
           <div className="flex flex-col sm:flex-row shadow-xl border  rounded-2xl py-4 px-4 md:px-8 relative overflow-hidden" key={feed.id}>
             <div className="size-10 sm:size-12 rounded-full bg-rose-400 absolute right-0 top-1/2 -translate-y-1/2 overflow-hidden translate-x-5"></div>
             <div>
               
-              <Avatar name={feed.authorName} imageUrl={feed.authorImg} />
+              <Avatar name={feed?.author?.name ? feed.author.name : feed.name} imageUrl={feed.authorImg} />
             </div>
             <div className="flex flex-col md:mt-4">
               <h4 className="text-lg font-medium text-gray-600">
-                {feed.authorName}
+                {feed?.author?.name ? feed.author.name : feed.name}
               </h4>
               <p className="text-gray-400 absolute right-20 top-12">
                 {timeToTimeAgo(feed.createdAt)}
@@ -58,79 +64,61 @@ const TweetList = () => {
 
 export default TweetList;
 
-export const feedData = [
-  {
-    id: 1,
-    authorImg:
-      "",
-    authorName: "Elon Musk",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    createdAt: "2022-10-01T12:00:00.000Z",
-  },
+// export const feedData = [
+//   {
+//     id: 1,
+//     authorImg:
+//       "",
+//     authorName: "Elon Musk",
+//     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+//     createdAt: "2022-10-01T12:00:00.000Z",
+//   },
 
-  {
-    id: 2,
-    authorImg:
-      "../user.jpg",
-    authorName: "Elon Musk",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    createdAt: Date.now() - 1000 * 60 * 60 ,
-  },
+//   {
+//     id: 2,
+//     authorImg:
+//       "../user.jpg",
+//     authorName: "Elon Musk",
+//     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+//     createdAt: Date.now() - 1000 * 60 * 60 ,
+//   },
 
-  {
-    id: 3,
-    authorImg:"../user.jpg",
-    authorName: "Elon Musk",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    createdAt: "2021-10-01T12:00:00.000Z",
-  },
+//   {
+//     id: 3,
+//     authorImg:"../user.jpg",
+//     authorName: "Elon Musk",
+//     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+//     createdAt: "2021-10-01T12:00:00.000Z",
+//   },
 
-  {
-    id: 4,
-    authorImg:
-      "../user.jpg",
-    authorName: "Elon Musk",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    createdAt: "2021-10-01T12:00:00.000Z",
-  },
+//   {
+//     id: 4,
+//     authorImg:
+//       "../user.jpg",
+//     authorName: "Elon Musk",
+//     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+//     createdAt: "2021-10-01T12:00:00.000Z",
+//   },
 
-  {
-    id: 5,
-    authorImg:
-      "../user.jpg",
-    authorName: "Elon Musk",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    createdAt: "2021-10-01T12:00:00.000Z",
-  },
+//   {
+//     id: 5,
+//     authorImg:
+//       "../user.jpg",
+//     authorName: "Elon Musk",
+//     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+//     createdAt: "2021-10-01T12:00:00.000Z",
+//   },
 
-  {
-    id: 6,
-    authorImg:
-      "../user.jpg",
-    authorName: "Elon Musk",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    createdAt: "2021-10-01T12:00:00.000Z",
-  },
+//   {
+//     id: 6,
+//     authorImg:
+//       "../user.jpg",
+//     authorName: "Elon Musk",
+//     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+//     createdAt: "2021-10-01T12:00:00.000Z",
+//   },
 
   
-];
+// ];
 
 
-export const Avatar = ({ name, imageUrl }) => {
-    const getInitials = (name) => {
-      const initials = name.split(' ').map((word) => word[0]).join('').toUpperCase();
-      return initials;
-    };
-  
-    return (
-      <div className="size-12 md:size-16 mr-4 rounded-full border object-cover border-gray-600">
-        {imageUrl ? (
-          <img src={imageUrl} alt={`${name}'s Avatar`} className="avatar-image rounded-full" />
-        ) : (
-            <div className="grid place-items-center p-4 text-gray-400 text-xl font-bold">
-            {getInitials(name)}
-          </div>
-        )}
-      </div>
-    );
-  };

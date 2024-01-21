@@ -1,20 +1,94 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegComment, FaWindowClose } from "react-icons/fa";
 import TweetList from "./TweetList";
 import { RiCloseCircleLine } from "react-icons/ri";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { DNA } from "react-loader-spinner";
 const Feedx = () => {
-  const [isWriteBoxOpen, setIsWriteBoxOpen] = useState(false);
+  const { data: session, status } = useSession();
 
+  const router = useRouter();
+  const authorId = session?.user?.id;
+  const [isWriteBoxOpen, setIsWriteBoxOpen] = useState(false);
+  const[feedData, setFeedData] = useState([])
   const handleWriteButtonClick = () => {
     setIsWriteBoxOpen(true);
   };
 
-  const handleTweet = (text) => {
-    // Handle the tweet logic here, e.g., send it to the server
-    console.log("Tweet:", text);
-    setIsWriteBoxOpen(false);
+  const getFeed = async () => {
+    try {
+      const response = await axios.get('/api/getAllTweets');
+      const data = await response.data;
+      console.log(data[0].author.name)
+      setFeedData(data);
+      
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  useEffect(() => {
+    getFeed();
+  }, []);
+  const postTweet = async (text) => {
+    console.log("Posting tweet", text);
+    try {
+      const response = await axios.post("/api/create-tweet", {
+        text,
+        authorId,
+      });
+
+      if (response.status === 200) {
+        console.log("Tweet posted successfully");
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error posting tweet");
+    }
+  };
+
+  const handleTweet = async (text) => {
+    setIsWriteBoxOpen(false);
+
+    try {
+      await postTweet(text);
+      toast.success("Tweet posted successfully");
+      getFeed();
+    } catch (error) {
+      console.error(error);
+      toast.error("Error posting tweet");
+    }
+  };
+  useEffect(() => {
+    if (session?.user?.email && status === "authenticated") {
+      router.push("/feed");
+    } else {
+      router.push("/login");
+    }
+  }, [session, router, status]);
+
+  if (status === "loading") {
+    return (
+      <div className="grid min-h-screen mx-auto justify-center items-center">
+        <DNA
+          visible={true}
+          height="180"
+          width="180"
+          ariaLabel="dna-loading"
+          wrapperStyle={{}}
+          wrapperClass="dna-wrapper"
+        />
+      </div>
+    );
+  }
+
+  if (status === "error") {
+    return <div>Error</div>;
+  }
 
   return (
     <>
@@ -36,31 +110,7 @@ const Feedx = () => {
           )}
 
           {/* Tweet card */}
-          {/* <div className="flex flex-row items-center w-full border rounded-xl shadow-md mt-4">
-            <div className="flex space-x-4 p-4 flex-1">
-              <div className="w-20 h-20 bg-white border border-black rounded-full overflow-hidden"></div>
-              <div className="flex-1">
-                <div className="flex space-x-2">
-                  <div className="font-semibold">Name</div>
-                  <div className="text-gray-500">@username</div>
-                  <div className="text-gray-500">•</div>
-                  <div className="text-gray-500">1h</div>
-                </div>
-                <div className="text-gray-500">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Repudiandae porro tempora commodi rem minus asperiores amet id
-                  illum voluptas incidunt, aperiam quaerat dolorum iste, quas
-                  enim, minima voluptatibus. Illum, eveniet.
-                </div>
-              </div>
-            </div>
-            <div className="w-10 h-10 overflow-hidden">
-              
-              <div className="bg-[#ff748d] h-10 w-10 ml-5 rounded-full"></div>
-            </div>
-          </div> */}
-
-          <TweetList />
+          <TweetList feedData={feedData}  />
         </div>
       </div>
     </>
@@ -68,6 +118,7 @@ const Feedx = () => {
 };
 
 export default Feedx;
+// export {session, status};
 
 const WriteDialog = ({ onClose, onTweet }) => {
   const [writeText, setWriteText] = useState("");
@@ -82,8 +133,10 @@ const WriteDialog = ({ onClose, onTweet }) => {
       <div className="bg-white p-4 rounded-md shadow-md ">
         {/* Write box content goes here */}
         <div className="flex items-center justify-between py-3">
-          <div className="font-semibold text-gray-700">What&apos;s on your mind?</div>
-          <button onClick={onClose} >
+          <div className="font-semibold text-gray-700">
+            What&apos;s on your mind?
+          </div>
+          <button onClick={onClose}>
             <RiCloseCircleLine className="text-2xl text-red-500" />
           </button>
         </div>

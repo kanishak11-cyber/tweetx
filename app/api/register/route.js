@@ -67,3 +67,34 @@ export async function POST(req) {
     });
   }
 }
+
+
+export async function GET() {
+  try {
+    const users = await prisma.user.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include:{
+        tweets: {
+          select: {
+            text: true,
+          },
+        },
+        followers: true,
+        following: true,
+      }
+    });
+    return new NextResponse(JSON.stringify(users), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return new NextResponse("Something went wrong.", {
+      status: 500,
+    });
+  }
+}

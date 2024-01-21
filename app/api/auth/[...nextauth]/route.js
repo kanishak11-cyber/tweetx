@@ -15,6 +15,9 @@ const authorize = async (credentials) => {
 
   const user = await prisma.user.findUnique({
     where: { email },
+    include: { tweets: true,
+      followers: true,
+      following: true, },
   });
 
   if (!user) {
@@ -53,6 +56,10 @@ const authOptions = {
     },
     async session({ session, token, user }) {
       session.user = token;
+      tweets: user?.tweets;
+      followers: user?.followers;
+      following: user?.following;
+
       return session;
     },
   },
